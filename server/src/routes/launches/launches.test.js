@@ -14,6 +14,7 @@ describe("Launches API", () => {
 
   afterAll(async () => {
     await mongoDisconnect();
+    console.log("MongoDB disconnected.");
   });
 
   describe("Test GET launches", () => {

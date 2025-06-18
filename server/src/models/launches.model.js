@@ -45,7 +45,7 @@ async function populateLaunches() {
   });
 
   if (response.status !== 200) {
-    console.log("Proble downloading launch data");
+    console.log("Problem downloading launch data");
     throw new Error("LAUNCH DATA FAILED");
   }
 
@@ -61,7 +61,7 @@ async function populateLaunches() {
       flightNumber: launchDoc["flight_number"],
       mission: launchDoc["name"],
       rocket: launchDoc["rocket"]["name"],
-      launchDate: launchDoc["date-local"],
+      launchDate: launchDoc["date_local"],
       upcoming: launchDoc["upcoming"],
       success: launchDoc["success"],
       customers,
@@ -139,14 +139,19 @@ async function scheduleNewLaunch(launch) {
 
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
 
-  const newLaunch = Object.assign(launch, {
+  const newLaunch = {
+    ...launch,
     success: true,
     upcoming: true,
     customers: ["Zero to Mastery", "NASA"],
     flightNumber: newFlightNumber,
-  });
+  };
+
+  console.log("Received new launch:", launch);
 
   await saveLaunch(newLaunch);
+
+  return newLaunch;
 }
 
 async function abortLaunchById(launchId) {
